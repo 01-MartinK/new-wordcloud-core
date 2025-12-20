@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS TAGCLOUDS
+(
+    id VARCHAR(32) NOT NULL PRIMARY KEY,
+    status INT,
+    word_list TEXT
+);
