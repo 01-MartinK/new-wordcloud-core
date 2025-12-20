@@ -1,7 +1,5 @@
 package com.mk.wordcloud
 
-import org.flywaydb.core.Flyway
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
