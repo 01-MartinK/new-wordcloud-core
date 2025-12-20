@@ -1,10 +1,10 @@
 package com.mk.wordcloud.model
 
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 
 enum class STATUS {
     Pending,
@@ -16,9 +16,10 @@ enum class STATUS {
 @Table(name = "tagclouds")
 data class TagCloud(
     @Id
-    private val id: String,
-    private val status: STATUS = STATUS.Pending,
-    private val wordList: String = "",
+    val id: String,
+    val status: STATUS = STATUS.Pending,
+    @JdbcTypeCode(SqlTypes.JSON)
+    private val wordList: Map<String, Number> = emptyMap(),
 )
 
 

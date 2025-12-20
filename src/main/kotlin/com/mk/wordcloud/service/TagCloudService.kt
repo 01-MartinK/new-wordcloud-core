@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class TagCloudService(private val tagCloudRepository: TagCloudRepository) {
-    fun getEntry(id: Long): ResponseEntity<TagCloud> = tagCloudRepository.findById(id)
-        .map { tagCloud -> ResponseEntity.ok(tagCloud) }
-        .orElse(ResponseEntity.notFound().build())
+    fun getEntry(id: String): ResponseEntity<TagCloud> {
+        val tagCloud = tagCloudRepository.findAll().find { it.id == id } ?: return ResponseEntity.notFound().build()
+        return ResponseEntity.ok(tagCloud)
+    }
 
     fun createEntry(): ResponseEntity<TagCloud> = ResponseEntity.ok(
         tagCloudRepository.save(
@@ -19,9 +20,9 @@ class TagCloudService(private val tagCloudRepository: TagCloudRepository) {
         )
     )
 
-    fun deleteEntry(id: Long): ResponseEntity<Void> = tagCloudRepository.findById(id)
-        .map {
-            tagCloud -> tagCloudRepository.delete(tagCloud)
-            ResponseEntity<Void>(HttpStatus.ACCEPTED)
-        }.orElse(ResponseEntity.notFound().build())
+    fun deleteEntry(id: String): ResponseEntity<Void> {
+        val tagCloud = tagCloudRepository.findAll().find { it.id == id } ?: return ResponseEntity.notFound().build()
+        tagCloudRepository.delete(tagCloud)
+        return ResponseEntity<Void>(HttpStatus.OK)
+    }
 }

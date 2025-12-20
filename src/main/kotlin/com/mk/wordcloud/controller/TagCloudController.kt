@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 class TagCloudController(private val tagCloudService: TagCloudService) {
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,9 +25,9 @@ class TagCloudController(private val tagCloudService: TagCloudService) {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getTagCloud(@PathVariable("id") id: Long): ResponseEntity<TagCloud> = tagCloudService.getEntry(id)
+    fun getTagCloud(@PathVariable("id") id: String): ResponseEntity<TagCloud> = tagCloudService.getEntry(id)
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteTagCloud(@PathVariable("id") id: Long): ResponseEntity<Void> = tagCloudService.deleteEntry(id)
+    fun deleteTagCloud(@PathVariable("id") id: String): ResponseEntity<Void> = tagCloudService.deleteEntry(id)
 }
