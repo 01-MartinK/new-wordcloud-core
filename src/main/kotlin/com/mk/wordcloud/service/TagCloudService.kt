@@ -14,10 +14,8 @@ class TagCloudService(private val tagCloudRepository: TagCloudRepository) {
         return ResponseEntity.ok(tagCloud)
     }
 
-    fun createEntry(): ResponseEntity<TagCloud> = ResponseEntity.ok(
-        tagCloudRepository.save(
-            TagCloud(NanoIdUtils.randomNanoId())
-        )
+    fun createEntry(): TagCloud = tagCloudRepository.save(
+        TagCloud(NanoIdUtils.randomNanoId(NanoIdUtils.DEFAULT_NUMBER_GENERATOR, NanoIdUtils.DEFAULT_ALPHABET, 10))
     )
 
     fun deleteEntry(id: String): ResponseEntity<Void> {

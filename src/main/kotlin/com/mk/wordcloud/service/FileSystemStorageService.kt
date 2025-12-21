@@ -1,38 +1,33 @@
 package com.mk.wordcloud.service
 
-import com.mk.wordcloud.config.StorageProperties
 import com.mk.wordcloud.model.StorageException
-import com.mk.wordcloud.model.StorageFileNotFoundException
-import org.springframework.core.io.Resource
-import org.springframework.core.io.UrlResource
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.util.FileSystemUtils
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
-import java.net.MalformedURLException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.stream.Stream
 
 @Service
 class FileSystemStorageService(
-    properties: StorageProperties
+    @Value($$"${spring.storage.location:/app/upload-dir}") private val storageLocation: String
 ) : StorageService {
     private val rootLocation: Path
 
     init {
-        if (properties.location.trim().isEmpty()) {
+        if (storageLocation.trim().isEmpty()) {
             throw StorageException("File upload location can not be Empty.")
         }
-        this.rootLocation = Paths.get(properties.location)
+        this.rootLocation = Paths.get(storageLocation)
         if (Files.exists(rootLocation).not()) {
             Files.createDirectory(rootLocation)
         }
     }
 
-    override fun store(file: MultipartFile) {
+    override fun store(file: MultipartFile, id: String): String {
         try {
             if (file.isEmpty) {
                 throw StorageException("Failed to store empty file.")
@@ -40,7 +35,7 @@ class FileSystemStorageService(
             val filename = file.originalFilename
                 ?: throw StorageException("Failed to store file with null filename")
 
-            val destinationFile = rootLocation.resolve(filename)
+            val destinationFile = rootLocation.resolve("${id}_$filename")
                 .normalize().toAbsolutePath()
 
             // Security check - prevent directory traversal
@@ -51,41 +46,15 @@ class FileSystemStorageService(
             file.inputStream.use { inputStream ->
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING)
             }
+
+            return "${id}_$filename"
         } catch (e: IOException) {
             throw StorageException("Failed to store file ${file.originalFilename}", e)
         }
     }
 
-    override fun loadAll(): Stream<Path> {
-        return try {
-            Files.walk(rootLocation, 1)
-                .filter { path -> path != rootLocation }
-                .map { path -> rootLocation.relativize(path) }
-        } catch (e: IOException) {
-            throw StorageException("Failed to read stored files", e)
-        }
-    }
-
-    override fun load(filename: String): Path {
-        return rootLocation.resolve(filename)
-    }
-
-    override fun loadAsResource(filename: String): Resource? {
-        return try {
-            val file = load(filename)
-            val resource = UrlResource(file.toUri())
-            if (resource.exists() || resource.isReadable) {
-                resource
-            } else {
-                throw StorageFileNotFoundException("Could not read file: $filename")
-            }
-        } catch (e: MalformedURLException) {
-            throw StorageFileNotFoundException("Could not read file: $filename", e)
-        }
-    }
-
     override fun deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile())
+        FileSystemUtils.deleteRecursively(rootLocation)
     }
 
     override fun init() {

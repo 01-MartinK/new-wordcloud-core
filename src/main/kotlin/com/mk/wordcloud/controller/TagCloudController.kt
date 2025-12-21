@@ -1,6 +1,9 @@
 package com.mk.wordcloud.controller
 
+import com.mk.wordcloud.model.Message
+import com.mk.wordcloud.model.ParseRequest
 import com.mk.wordcloud.model.TagCloud
+import com.mk.wordcloud.service.MessageProducer
 import com.mk.wordcloud.service.StorageService
 import com.mk.wordcloud.service.TagCloudService
 import org.springframework.http.HttpStatus
@@ -12,14 +15,24 @@ import org.springframework.web.multipart.MultipartFile
 @CrossOrigin(origins = ["*"], maxAge = 3600)
 @RestController
 @RequestMapping("/api")
-class TagCloudController(private val tagCloudService: TagCloudService, private val storageService: StorageService) {
+class TagCloudController(
+    private val tagCloudService: TagCloudService,
+    private val storageService: StorageService,
+    private val messageProducer: MessageProducer
+) {
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.CREATED)
     fun uploadTextFile(@RequestBody file: MultipartFile): ResponseEntity<String> {
 
-        storageService.store(file)
+        val entry = tagCloudService.createEntry()
+        val fileName = storageService.store(file, entry.id)
 
-        return ResponseEntity.ok("test")
+        val parseRequest = ParseRequest(entry.id, fileName)
+        val message = Message(content = parseRequest, sender = "CoreServer")
+
+        messageProducer.sendMessage(message)
+
+        return ResponseEntity.ok(entry.id)
     }
 
     @GetMapping("/{id}")

@@ -19,3 +19,15 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+  wordcloud:
+    volumes:
+      - shared-data:/app/upload-dir
+    environment:
+      - STORAGE_LOCATION=/app/upload-dir
+  worker:
+    volumes:
+      - shared-data:/app/upload-dir
+    environment:
+      - STORAGE_LOCATION=/app/upload-dir
+volumes:
+  shared-data:
