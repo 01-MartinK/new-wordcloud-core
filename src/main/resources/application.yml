@@ -4,7 +4,7 @@ spring:
     application:
         name: wordcloud
     datasource:
-        password: password
+        password: 774YmCC2
         url: jdbc:postgresql://localhost:5432/wordcloud
         username: postgres
     flyway:
