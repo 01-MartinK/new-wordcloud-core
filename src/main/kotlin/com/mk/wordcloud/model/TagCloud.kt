@@ -10,7 +10,8 @@ import org.hibernate.type.SqlTypes
 enum class STATUS {
     Pending,
     InProgress,
-    Complete
+    Complete,
+    Error
 }
 
 @Entity
