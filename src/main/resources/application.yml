@@ -1,10 +1,14 @@
 spring:
+    main:
+        allow-bean-definition-override: true
     application:
         name: wordcloud
     datasource:
         password: password
         url: jdbc:postgresql://localhost:5432/wordcloud
         username: postgres
+    flyway:
+        clean-disabled: false
     jpa:
         hibernate:
             ddl-auto: none
@@ -12,4 +16,17 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
                 format_sql: true
-        show-sql: true
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
+        queue: my-queue
+        exchange: my-exchange
+        routingkey: my-routingkey
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+    storage:
+        location: /app/upload-2
