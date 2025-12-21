@@ -20,14 +20,26 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
   wordcloud:
+    image: wordcloud-core:latest
+    depends_on:
+      - db
+      - rabbitmq
+    ports:
+      - "8081:8081"
     volumes:
       - shared-data:/app/upload-dir
     environment:
+      - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
+      - DATASOURCE_URL=jdbc:postgresql://db:5432/wordcloud
       - STORAGE_LOCATION=/app/upload-dir
-  worker:
-    volumes:
-      - shared-data:/app/upload-dir
-    environment:
-      - STORAGE_LOCATION=/app/upload-dir
+      - RABBIT_MQ_QUEUE="wordcloud"
+      - RABBIT_MQ_EXCHANGE="772"
+      - RABBIT_MQ_ROUTINGKEY="tagcloud"
+  frontend:
+    image: wordcloud-frontend:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - wordcloud
 volumes:
   shared-data:

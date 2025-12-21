@@ -1,9 +1,19 @@
+import java.util.Properties
+
+val dotenv = Properties().apply {
+	val envFile = rootProject.file(".env")
+	if (envFile.exists()) {
+		envFile.inputStream().use { load(it) }
+	}
+}
+
 plugins {
 	kotlin("jvm") version "2.2.21"
 	kotlin("plugin.spring") version "2.2.21"
 	kotlin("plugin.serialization") version "2.3.0"
 	id("org.springframework.boot") version "4.0.1"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("co.uzzu.dotenv.gradle") version "4.0.0"
 	kotlin("plugin.jpa") version "2.2.21"
 }
 
@@ -54,4 +64,7 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	dotenv.forEach { (key, value) ->
+		environment(key.toString(), value.toString())
+	}
 }

@@ -1,6 +1,24 @@
-    FROM openjdk:21 - jdk - slim
-    WORKDIR /app
-    RUN ./gradlew build
-    COPY ./build/libs/wordcloud-0.0.1-SNAPSHOT.jar /app/app.jar
-    EXPOSE 8080
-    CMD ["java", "-jar", "wordcloud-0.0.1-SNAPSHOT.jar"]
+FROM eclipse-temurin:21-jdk-alpine-3.23 as build
+WORKDIR /app
+
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+
+RUN ./gradlew dependencies --no-daemon
+
+COPY src src
+RUN ./gradlew bootJar --no-daemon -x test
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# Standard Spring Boot port
+EXPOSE 8081
+EXPOSE 5432
+
+# Run the app
+ENTRYPOINT ["java", "-jar", "app.jar"]
