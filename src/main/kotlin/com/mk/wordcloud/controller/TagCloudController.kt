@@ -37,9 +37,18 @@ class TagCloudController(
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getTagCloud(@PathVariable("id") id: String): ResponseEntity<TagCloud> = tagCloudService.getEntry(id)
+    fun getTagCloud(@PathVariable("id") id: String): ResponseEntity<TagCloud> {
+        val entry = tagCloudService.getEntry(id)
+        return if (entry != null) ResponseEntity.ok(entry) else ResponseEntity.notFound().build()
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteTagCloud(@PathVariable("id") id: String): ResponseEntity<Void> = tagCloudService.deleteEntry(id)
+    fun deleteTagCloud(@PathVariable("id") id: String): ResponseEntity<Void> {
+        return if (tagCloudService.deleteEntry(id)) {
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
 }

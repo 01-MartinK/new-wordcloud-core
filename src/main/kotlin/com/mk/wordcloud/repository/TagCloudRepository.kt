@@ -7,4 +7,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 @Transactional(Transactional.TxType.MANDATORY)
-interface TagCloudRepository: JpaRepository<TagCloud, Long>
+interface TagCloudRepository : JpaRepository<TagCloud, String>

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
-enum class STATUS {
+enum class Status {
     Pending,
     InProgress,
     Complete,
@@ -20,7 +20,7 @@ enum class STATUS {
 data class TagCloud(
     @Id
     val id: String,
-    val status: STATUS = STATUS.Pending,
+    val status: Status = Status.Pending,
     @JdbcTypeCode(SqlTypes.JSON)
     private val wordList: Map<String, Int> = emptyMap(),
 )
