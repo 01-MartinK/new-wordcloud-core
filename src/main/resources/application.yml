@@ -7,7 +7,7 @@ spring:
         name: wordcloud
     datasource:
         password: ${DB_PASSWORD}
-        url: ${DB_URL}
+        url: ${DB_URL:jdbc:postgresql://localhost:5432/wordcloud}
         username: ${DB_USERNAME}
     flyway:
         clean-disabled: false
