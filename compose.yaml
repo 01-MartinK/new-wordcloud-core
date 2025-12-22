@@ -7,7 +7,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 774YmCC2
+      POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
       POSTGRES_DB: wordcloud
       POSTGRES_DATA: /var/lib/postgresql
   rabbitmq:
@@ -32,6 +32,20 @@ services:
       - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
       - DATASOURCE_URL=jdbc:postgresql://db:5432/wordcloud
       - STORAGE_LOCATION=/app/upload-dir
+      - RABBIT_MQ_HOST=rabbitmq
+      - RABBIT_MQ_QUEUE="wordcloud"
+      - RABBIT_MQ_EXCHANGE="772"
+      - RABBIT_MQ_ROUTINGKEY="tagcloud"
+  worker:
+    image: wordcloud-worker:latest
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
+      - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
+      - DATASOURCE_URL=jdbc:postgresql://db:5432/wordcloud
+      - STORAGE_LOCATION=/app/upload-dir
+      - RABBIT_MQ_HOST=rabbitmq
       - RABBIT_MQ_QUEUE="wordcloud"
       - RABBIT_MQ_EXCHANGE="772"
       - RABBIT_MQ_ROUTINGKEY="tagcloud"
