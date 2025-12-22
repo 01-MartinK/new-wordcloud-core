@@ -6,9 +6,9 @@ spring:
     application:
         name: wordcloud
     datasource:
-        password: ${DATASOURCE_PASSWORD}
-        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/wordcloud}
-        username: ${DATASOURCE_USERNAME:postgres}
+        password: ${DB_PASSWORD}
+        url: ${DB_URL}
+        username: ${DB_USERNAME}
     flyway:
         clean-disabled: false
     jpa:
@@ -23,9 +23,9 @@ spring:
         port: 5672
         username: guest
         password: guest
-        queue: ${RABBIT_MQ_QUEUE:my-queue}
-        exchange: ${RABBIT_MQ_EXCHANGE:my-exchange}
-        routingkey: ${RABBIT_MQ_ROUTINGKEY:my-routingkey}
+        queue: ${MQ_QUEUE:wordcloud}
+        exchange: ${MQ_EXCHANGE:772}
+        routingkey: ${MQ_ROUTINGKEY:tagcloud}
     servlet:
         multipart:
             max-file-size: 100MB

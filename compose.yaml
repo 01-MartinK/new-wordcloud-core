@@ -29,13 +29,14 @@ services:
     volumes:
       - shared-data:/app/upload-dir
     environment:
-      - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
-      - DATASOURCE_URL=jdbc:postgresql://db:5432/wordcloud
+      - DB_USERNAME=$${DATASOURCE_USERNAME:postgres}
+      - DB_PASSWORD=$${DATASOURCE_PASSWORD}
+      - DB_URL=$${DATASOURCE_URL:jdbc:postgresql://db:5432/wordcloud}
       - STORAGE_LOCATION=/app/upload-dir
-      - RABBIT_MQ_HOST=rabbitmq
-      - RABBIT_MQ_QUEUE="wordcloud"
-      - RABBIT_MQ_EXCHANGE="772"
-      - RABBIT_MQ_ROUTINGKEY="tagcloud"
+      - MQ_HOST=rabbitmq
+      - MQ_QUEUE=$${RABBIT_MQ_QUEUE}
+      - MQ_EXCHANGE=$${RABBIT_MQ_EXCHANGE}
+      - MQ_ROUTINGKEY=$${RABBIT_MQ_ROUTINGKEY}
   worker:
     image: kuttmartin/wordcloud-worker:master
     depends_on:
@@ -44,13 +45,14 @@ services:
     volumes:
       - shared-data:/app/upload-dir
     environment:
-      - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
-      - DATASOURCE_URL=jdbc:postgresql://db:5432/wordcloud
+      - DB_USERNAME=$${DATASOURCE_USERNAME:postgres}
+      - DB_PASSWORD=$${DATASOURCE_PASSWORD}
+      - DB_URL=$${DATASOURCE_URL:jdbc:postgresql://db:5432/wordcloud}
       - STORAGE_LOCATION=/app/upload-dir
-      - RABBIT_MQ_HOST=rabbitmq
-      - RABBIT_MQ_QUEUE="wordcloud"
-      - RABBIT_MQ_EXCHANGE="772"
-      - RABBIT_MQ_ROUTINGKEY="tagcloud"
+      - MQ_HOST=rabbitmq
+      - MQ_QUEUE=$${RABBIT_MQ_QUEUE}
+      - MQ_EXCHANGE=$${RABBIT_MQ_EXCHANGE}
+      - MQ_ROUTINGKEY=$${RABBIT_MQ_ROUTINGKEY}
   frontend:
     image: kuttmartin/wordcloud-frontend:master
     ports:
