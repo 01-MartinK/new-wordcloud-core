@@ -13,6 +13,14 @@ state in PostgreSQL.
 * **Build Tool:** Gradle (Kotlin DSL)
 * **Containerization:** Docker & Docker Compose
 
+### Components
+
+[Wordcloud Core](https://github.com/01-MartinK/new-wordcloud-core) <- this
+
+[Wordcloud Worker](https://github.com/01-MartinK/new-wordcloud-worker)
+
+[Wordcloud Frontend](https://github.com/01-MartinK/new-wordcloud-frontend)
+
 ## Architecture Overview
 
 1. **Rest API**: Exposes endpoints for clients to upload text files and check processing status.
