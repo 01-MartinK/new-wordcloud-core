@@ -32,50 +32,44 @@ state in PostgreSQL.
 The project includes a `compose.yaml` file to orchestrate the Core service, Worker, Frontend, Database, and Message
 Broker.
 
-// ... existing code ...
+To start the stack:
+
+```bash
+docker-compose up
+
+docker-compose up -d #for headless version
+```
+
+To clear and and pull the images again:
+
+```bash
+docker-compose stop
+docker-compose rm -f
+docker-compose pull   
+```
+
+To run it locally:
+
+```bash
+./gradlew build
+DB_PASSWORD=<password> java -jar build/libs/wordcloud-core-0.0.1-SNAPSHOT.jar
+```
 
 * **Containerization:** Docker & Docker Compose
 
-## ⚙️ Configuration & Environment Variables
+## Configuration & Environment Variables
 
 The application uses a combination of `src/main/resources/application.yml` and environment variables. For local
 development, you should create a `.env` file in the project root.
 
-### Required Environment Variables
+### Environment Variables
 
-The following variables **must** be defined for the application to function correctly:
-
-| Variable              | Description                                                                                                      |
-|:----------------------|:-----------------------------------------------------------------------------------------------------------------|
-| `DATASOURCE_PASSWORD` | Password for the PostgreSQL database.                                                                            |
-| `STORAGE_LOCATION`    | For local testing! The absolute path where uploaded files will be stored (e.g., `/home/user/wordcloud/uploads`). |
-
-### Optional Environment Variables
-
-These have defaults defined in `application.yml` but can be overridden:
-
-| Variable               | Default                                      | Description                             |
-|:-----------------------|:---------------------------------------------|:----------------------------------------|
-| `PORT`                 | `8081`                                       | Server port.                            |
-| `DATASOURCE_URL`       | `jdbc:postgresql://localhost:5432/wordcloud` | Database connection string.             |
-| `DATASOURCE_USERNAME`  | `postgres`                                   | Database username.                      |
-| `RABBIT_MQ_HOST`       | `localhost`                                  | Hostname for the RabbitMQ broker.       |
-| `RABBIT_MQ_QUEUE`      | `my-queue`                                   | The queue name for processing requests. |
-| `RABBIT_MQ_EXCHANGE`   | `my-exchange`                                | The exchange name for RabbitMQ.         |
-| `RABBIT_MQ_ROUTINGKEY` | `my-routingkey`                              | The routing key for messages.           |
-
-### Example `.env` File
-
-Create a file named `.env` in the `wordcloud` root directory:
-
-```env
-DATASOURCE_PASSWORD=your_secure_password
-STORAGE_LOCATION=./upload-dir
-# Optional overrides
-PORT=8081
-RABBIT_MQ_HOST=localhost
-```
-
-## 🏗 Architecture Overview
-
-// ... existing code ...
+| Variable Name          | Description               | Default                                      |
+|------------------------|---------------------------|----------------------------------------------|
+| `DB_USERNAME`          | PostgreSQL username       | `postgres`                                   |
+| `DB_PASSWORD`          | PostgreSQL password       | (required)                                   |
+| `DB_URL`               | PostgreSQL connection URL | `jdbc:postgresql://localhost:5432/wordcloud` |
+| `RABBIT_MQ_QUEUE`      | RabbitMQ queue name       | `wordcloud`                                  |
+| `RABBIT_MQ_EXCHANGE`   | RabbitMQ exchange name    | `772`                                        |
+| `RABBIT_MQ_ROUTINGKEY` | RabbitMQ routing key      | `tagcloud`                                   |
+| `STORAGE`              | Path to look for files    | `upload-dir`                                 |
