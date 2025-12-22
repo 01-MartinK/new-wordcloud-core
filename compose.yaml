@@ -34,9 +34,9 @@ services:
       DB_URL: jdbc:postgresql://db:5432/wordcloud
       STORAGE_LOCATION: /app/upload-dir
       MQ_HOST: rabbitmq
-      MQ_QUEUE: ${RABBIT_MQ_QUEUE}
-      MQ_EXCHANGE: ${RABBIT_MQ_EXCHANGE}
-      MQ_ROUTINGKEY: ${RABBIT_MQ_ROUTINGKEY}
+      MQ_QUEUE: ${RABBIT_MQ_QUEUE:-wordcloud}
+      MQ_EXCHANGE: ${RABBIT_MQ_EXCHANGE:-772}
+      MQ_ROUTINGKEY: ${RABBIT_MQ_ROUTINGKEY:-tagcloud}
   worker:
     image: kuttmartin/wordcloud-worker:master
     depends_on:
@@ -50,9 +50,9 @@ services:
       DB_URL: jdbc:postgresql://db:5432/wordcloud
       STORAGE_LOCATION: /app/upload-dir
       MQ_HOST: rabbitmq
-      MQ_QUEUE: ${RABBIT_MQ_QUEUE}
-      MQ_EXCHANGE: ${RABBIT_MQ_EXCHANGE}
-      MQ_ROUTINGKEY: ${RABBIT_MQ_ROUTINGKEY}
+      MQ_QUEUE: ${RABBIT_MQ_QUEUE:-wordcloud}
+      MQ_EXCHANGE: ${RABBIT_MQ_EXCHANGE:-772}
+      MQ_ROUTINGKEY: ${RABBIT_MQ_ROUTINGKEY:-tagcloud}
   frontend:
     image: kuttmartin/wordcloud-frontend:master
     ports:
