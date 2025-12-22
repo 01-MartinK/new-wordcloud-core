@@ -1,4 +1,4 @@
-package coQ9kxZm.mk.wordcloud.service
+package com.mk.wordcloud.service
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.mk.wordcloud.model.TagCloud
