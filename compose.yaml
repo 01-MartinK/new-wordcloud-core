@@ -41,6 +41,8 @@ services:
     depends_on:
       - db
       - rabbitmq
+    volumes:
+      - shared-data:/app/upload-dir
     environment:
       - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
       - DATASOURCE_URL=jdbc:postgresql://db:5432/wordcloud
@@ -55,5 +57,7 @@ services:
       - "8080:80"
     depends_on:
       - wordcloud
+    environment:
+      - API_URL=http://localhost:8081
 volumes:
   shared-data:
