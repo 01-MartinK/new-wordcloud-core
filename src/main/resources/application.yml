@@ -23,9 +23,9 @@ spring:
         port: 5672
         username: guest
         password: guest
-        queue: ${MQ_QUEUE}
-        exchange: ${MQ_EXCHANGE}
-        routingkey: ${MQ_ROUTINGKEY}
+        queue: ${MQ_QUEUE:wordcloud}
+        exchange: ${MQ_EXCHANGE:kevin}
+        routingkey: ${MQ_ROUTINGKEY:tagcloud}
     servlet:
         multipart:
             max-file-size: 100MB
