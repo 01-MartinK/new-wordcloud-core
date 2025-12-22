@@ -20,7 +20,7 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
   wordcloud:
-    image: kuttmartin/wordcloud-core:latest
+    image: kuttmartin/wordcloud-core:master
     depends_on:
       - db
       - rabbitmq
@@ -37,7 +37,7 @@ services:
       - RABBIT_MQ_EXCHANGE="772"
       - RABBIT_MQ_ROUTINGKEY="tagcloud"
   worker:
-    image: kuttmartin/wordcloud-worker:latest
+    image: kuttmartin/wordcloud-worker:master
     depends_on:
       - db
       - rabbitmq
@@ -52,7 +52,7 @@ services:
       - RABBIT_MQ_EXCHANGE="772"
       - RABBIT_MQ_ROUTINGKEY="tagcloud"
   frontend:
-    image: kuttmartin/wordcloud-frontend:latest
+    image: kuttmartin/wordcloud-frontend:master
     ports:
       - "8080:80"
     depends_on:
