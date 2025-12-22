@@ -40,7 +40,7 @@ docker-compose up
 docker-compose up -d #for headless version
 ```
 
-To clear and and pull the images again:
+To clear and pull the images again:
 
 ```bash
 docker-compose stop
