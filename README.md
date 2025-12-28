@@ -48,6 +48,8 @@ docker-compose up
 docker-compose up -d #for headless version
 ```
 
+The frontend will be accessible at ``` localhost:8080 ```
+
 To clear and pull the images again:
 
 ```bash
